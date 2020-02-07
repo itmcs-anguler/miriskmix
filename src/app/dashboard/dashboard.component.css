@@ -1,0 +1,20 @@
+.divstyle{
+    width: 19.6%; height: 70px; border: 0.5px solid #cccccca8!important;text-align: center;
+    padding: 3px;
+}
+.bg-red{
+    background-color: #ff0000;
+}
+ .bg-green{
+    background-color: green;
+} 
+.bg-yellow{
+    background-color: #FFBF00;
+}
+.btn-style{
+    background-color: white;border-radius: 50%; margin-top: 15px;
+}
+
+.div-padding{
+    padding-right: 4px;
+}

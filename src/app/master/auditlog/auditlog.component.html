@@ -1,0 +1,66 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-light col-md-12">
+  <div class="col-md-6">
+    <button type="button" navdrpbtn="maindropdown" class="text-secondary btn ">
+      <span class="mainheadName">
+        &nbsp;Audit Logs
+      </span>
+    </button>
+  </div>
+  <div class="col-md-6"></div>
+</nav>
+<div class="main-content" *ngIf="setOption == 'Grid'">
+  <div class="card" style="padding: 20px;">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="form-group">
+          <app-select-app [mainlabel]="moduleLabel" [mainlabelclass]="moduleLabelClass" [mainid]="moduleid"
+            [optionsValues]="preparedmoduleOptions" (customChange)="fnCustomSearchSet($event,'moduleCustomSearch')"
+            [selectedVal]="drpModulevalueCustomSearch"></app-select-app>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <app-select-app [mainlabel]="loginUserLabel" [mainid]="loginUserid" [optionsValues]="preparedloginUserOptions"
+            (customChange)="fnCustomSearchSet($event,'loginUserCustomSearch')"
+            [selectedVal]="drpLoginUservalueCustomSearch"></app-select-app>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <label class="lblgrey18bold"><b>Operation Date&nbsp;<span class="theme-color">(From)</span></b></label>
+          <input [(ngModel)]="fromTime" [owlDateTimeTrigger]="dttimeFrom" [owlDateTime]="dttimeFrom"
+            placeholder="Operation Date From" class="form-control">
+          <owl-date-time [pickerType]="'calendar'" #dttimeFrom></owl-date-time>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <label class="lblgrey18bold"><b>Operation Date&nbsp;<span class="theme-color">(To)</span></b></label>
+        <input [(ngModel)]="toTime" [owlDateTimeTrigger]="dttimeTo" [owlDateTime]="dttimeTo"
+          placeholder="Operation Date To" class="form-control">
+        <owl-date-time [pickerType]="'calendar'" #dttimeTo></owl-date-time>
+        <!-- <owl-date-time #dttimeTo></owl-date-time> -->
+      </div>
+    </div>
+    <div class="row text-center">
+      <div class="col-md-12">
+        <button class="btn btn-primary mainheadbtn" (click)="fnSearch()" title="For Search Risk Register">
+          <fa name="search"></fa>&nbsp;Search
+        </button>&nbsp;
+        <button class="btn btn-primary" title="For Reset Risk Register" (click)="resetSearch()">
+          <fa name="refresh"></fa>&nbsp;Reset
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+            <app-table-app [customDatatableobj]="datatable"></app-table-app>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

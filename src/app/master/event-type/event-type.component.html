@@ -1,0 +1,91 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-light col-md-12">
+  <div class="col-md-6">
+    <button type="button" navdrpbtn="maindropdown" class="text-secondary btn ">
+      <span class="mainheadName">
+        &nbsp;Event Type
+      </span>
+    </button>
+  </div>
+  <div class="col-md-6">
+    <button class="btn btn-primary pull-right mainheadbtn" *ngIf="setOption == 'Grid'" (click)="changeMenu('Add')"
+      title="For add new Category">
+      <fa name="plus"></fa>&nbsp;Add Event Type
+    </button>
+    <div class="pull-right" *ngIf="setOption == 'Add'">
+      <button [disabled]="loading" *ngIf="canSave" class="btn btn-primary btn-grey" (click)="onSubmit();">
+        <fa name="save"></fa>
+      </button>&nbsp;
+      <button class="btn btn-primary btn-grey" (click)="changeMenu('Grid')">
+        <fa name="trash"></fa>
+      </button>&nbsp;
+      <button class="btn btn-primary btn-grey" (click)="exportAsXLSX()">
+        <fa name="file-excel-o"></fa>
+      </button>&nbsp;
+      <button class="btn btn-primary btn-grey" (click)="printAsPdf()">
+        <fa name="print"></fa>
+      </button>
+    </div>
+  </div>
+</nav>
+<div class="main-content" *ngIf="setOption == 'Grid'" (click)="changeMenu('Grid')">
+  <div class="card">
+    <div class="card-body">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6">
+
+              </div>
+              <div class="col-md-6">
+              </div>
+            </div>
+            <app-table-app (customDelete)="fnDelete($event)" (customEdit)="fnEdit($event)"
+              [customDatatableobj]="datatable"></app-table-app>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="main-content" *ngIf="setOption == 'Add'">
+  <div class="card">
+    <div class="card-body">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+
+            <div class="row">
+              <div class="col-md-12">
+                <form [formGroup]="eventTypeForm" (ngSubmit)="onSubmit()">
+                  <alert></alert>
+                  <div class="form-group">
+                    <label for="eventTypeName">Event Type</label>
+                    <input maxlength="100" type="text" formControlName="eventTypeName" class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && f.eventTypeName.errors }" />
+                    <div *ngIf="submitted && f.eventTypeName.errors" class="invalid-feedback">
+                      <div *ngIf="f.eventTypeName.errors.required">Event Type is required</div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="eventTypeDescription"> Description</label>
+                    <textarea maxlength="1000" type="text" formControlName="eventTypeDescription" class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && f.eventTypeDescription.errors }"></textarea>
+                    <div *ngIf="submitted && f.eventTypeDescription.errors" class="invalid-feedback">
+                      <div *ngIf="f.eventTypeDescription.errors.required">Event Type Description is
+                        required</div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <img *ngIf="loading" class="pl-3"
+                      src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

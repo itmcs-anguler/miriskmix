@@ -1,0 +1,60 @@
+.main-content{
+    box-shadow: 0 8px 6px -6px black;
+}
+
+.navbar-expand-lg{    
+    border-bottom: #ed5c0e 3px solid;
+    background-color: #ede0d9a3 !important;
+}
+
+.mainheadName{
+    font-weight: 600;
+    font-size: 18px;
+    color: #495057;
+}
+
+.mainheadbtn {
+    background-color: #ed5c0e;
+    color: white;
+    font-weight: 600;
+    border-color: #ed5c0e;
+}
+.btn-grey{
+    background-color: grey;
+    border-color: grey;
+    color: white;
+}
+
+
+.valid{
+    display: block;
+    color: #dc3545;
+}
+.custom{
+   border-color: #dc3545 ;
+    padding-right: calc(1.5em + .75rem);
+   
+    background-repeat: no-repeat;
+    background-position: right calc(.375em + .1875rem) center;
+    background-size: calc(.75em + .375rem) calc(.75em + .375rem);
+}
+.notValid{
+    display: none;
+}
+.mat-form-field-underline{
+    border-bottom: 1px solid #dc3545;
+}
+
+.form-control.is-invalid, .was-validated .form-control:invalid {
+        border: 1px solid #ced4da;
+     padding-right: calc(1.5em + .75rem);
+     background-image: url(); 
+    background-repeat: no-repeat;
+     background-position: right calc(.375em + .1875rem) center; 
+     background-size: calc(.75em + .375rem) calc(.75em + .375rem); 
+}
+.invalid-feedback {
+  
+    font-size: 105%;
+    color: #dc3545;
+}

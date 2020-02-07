@@ -1,0 +1,177 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-light col-md-12">
+  <div class="col-md-6">
+    <button type="button" navdrpbtn="maindropdown" class="text-secondary btn ">
+      <span class="mainheadName">
+        &nbsp;Asset Register
+      </span>
+    </button>
+  </div>
+  <div class="col-md-6">
+    <button class="btn btn-primary pull-right mainheadbtn" *ngIf="setOption == 'Grid'" (click)="changeMenu('Add')"
+      title="For add new Asset Register">
+      <fa name="plus"></fa>&nbsp;Add Asset Register
+    </button>
+    <div class="pull-right" *ngIf="setOption == 'Add'">
+      <button [disabled]="loading" *ngIf="canSave" class="btn btn-primary btn-grey" (click)="onSubmit();">
+        <fa name="save"></fa>
+      </button>&nbsp;
+      <button class="btn btn-primary btn-grey" (click)="changeMenu('Grid')">
+        <fa name="trash"></fa>
+      </button>&nbsp;
+      <button class="btn btn-primary btn-grey" (click)="exportAsXLSX()">
+        <fa name="file-excel-o"></fa>
+      </button>&nbsp;
+      <button class="btn btn-primary btn-grey" (click)="printAsPdf()">
+        <fa name="print"></fa>
+      </button>
+    </div>
+  </div>
+</nav>
+<div class="main-content" *ngIf="setOption == 'Grid'">
+  <div class="card">
+    <div class="card-body">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+            <app-table-app (customEdit)="fnEdit($event)" (customDelete)="fnDelete($event)"
+              [customDatatableobj]="datatable"></app-table-app>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="main-content" *ngIf="setOption == 'Add'">
+  <div class="card">
+    <div class="card-body">
+      <div class="container-fluid">
+        <form [formGroup]="assestForm">
+          <img *ngIf="loading" class="pl-3"
+            src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+          <div class="row">
+            <div class="col-md-12">
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Asset Name</label>
+                    <input type="text" placeholder="Asset Name" class="form-control" formControlName="assetName"
+                      [ngClass]="{ 'is-invalid': submitted && f.assetName.errors }" />
+                    <div *ngIf="submitted && f.assetName.errors" class="invalid-feedback">
+                      <div *ngIf="f.assetName.errors.required">Asset Name is required</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Description</label>
+                    <textarea type="text" placeholder="Description" class="form-control" formControlName="description"
+                      [ngClass]="{ 'is-invalid': submitted && f.description.errors }">
+                    </textarea>
+                    <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
+                      <div *ngIf="f.description.errors.required">Description is required</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" placeholder="Location" class="form-control" formControlName="location"
+                      [ngClass]="{ 'is-invalid': submitted && f.location.errors }" />
+                    <div *ngIf="submitted && f.location.errors" class="invalid-feedback">
+                      <div *ngIf="f.location.errors.required">Location is required</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Used For</label>
+                    <input type="text" placeholder="Used For" class="form-control" formControlName="usedFor"
+                      [ngClass]="{ 'is-invalid': submitted && f.usedFor.errors }" />
+                    <div *ngIf="submitted && f.usedFor.errors" class="invalid-feedback">
+                      <div *ngIf="f.usedFor.errors.required">Used For is required</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Procurement Date</label>
+
+                    <input type="text" [owlDateTimeTrigger]="dt" [owlDateTime]="dt" placeholder="Procurement Date"
+                      class="form-control" formControlName="procurementDate"
+                      [ngClass]="{ 'is-invalid': submitted && f.procurementDate.errors }">
+                    <owl-date-time [pickerType]="'calendar'" #dt></owl-date-time>
+                    <div *ngIf="submitted && f.procurementDate.errors" class="invalid-feedback">
+                      <div *ngIf="f.procurementDate.errors.required">Procurement Date is required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Procurement Price</label>
+                    <input type="number" placeholder="Procurement Price" class="form-control"
+                      formControlName="procurementPrice"
+                      [ngClass]="{ 'is-invalid': submitted && f.procurementPrice.errors }" />
+                    <div *ngIf="submitted && f.procurementPrice.errors" class="invalid-feedback">
+                      <div *ngIf="f.procurementPrice.errors.required">Procurement Price is required</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Depreciation</label>
+                    <input type="text" placeholder="Depreciation" class="form-control" formControlName="depreciation"
+                      [ngClass]="{ 'is-invalid': submitted && f.depreciation.errors }" />
+                    <div *ngIf="submitted && f.depreciation.errors" class="invalid-feedback">
+                      <div *ngIf="f.depreciation.errors.required">Depreciation is required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Current Value</label>
+                    <input type="text" placeholder="Current Value" class="form-control" formControlName="currentValue"
+                      [ngClass]="{ 'is-invalid': submitted && f.currentValue.errors }" />
+                    <div *ngIf="submitted && f.currentValue.errors" class="invalid-feedback">
+                      <div *ngIf="f.currentValue.errors.required">Current Value is required</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+
+              <!-- <div class="form-group">
+                <div class="row">
+
+                  <button (click)="onSubmit()" class="btn btn-primary">
+                    <fa name="save">
+                    </fa>&nbsp;Submit
+                  </button>&nbsp;
+                  <button [disabled]="loading" class="btn btn-danger" (click)="changeMenu('Grid')">
+                    <fa name="times">
+                    </fa>&nbsp;Cancel
+                  </button>
+                </div>
+              </div> -->
+
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>

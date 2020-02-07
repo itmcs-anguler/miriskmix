@@ -1,0 +1,130 @@
+<div class="card border-shadow" *ngIf="setOptionSub == 'Document'">
+  <div class="card-body">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6">
+              <label>
+                <h3 style="color: #ed5c0e;"> Document</h3>
+              </label>
+            </div>
+            <div class="col-md-6">
+              <button class="btn btn-primary pull-right" (click)="changeDocument()" title="For add new Category">
+                <fa name="plus"></fa>&nbsp;Add Document
+              </button>
+            </div>
+          </div>
+          <app-table-app id="AdditionaltabelId" (customDelete)="fnDeleteAdditionDocument($event)"
+            (customEdit)="fnEditAdditionDocument($event)" [customDatatableobj]="datatableDocument"></app-table-app>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card border-shadow" *ngIf="setOptionSub == 'show'">
+  <div class="card-body">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <label>
+            <h3 style="color: #ed5c0e;"> Additional Details </h3>
+          </label>
+
+          <div class="pull-right">
+            <button [disabled]="loading" *ngIf="canSave" class="btn btn-primary btn-grey" (click)="onSubmit();">
+              <fa name="save"></fa>
+            </button>&nbsp;
+            <button class="btn btn-primary btn-grey" (click)="cancelDocument()">
+              <fa name="trash"></fa>
+            </button>&nbsp;
+            <button class="btn btn-primary btn-grey" (click)="exportAsXLSX()">
+              <fa name="file-excel-o"></fa>
+            </button>&nbsp;
+            <button class="btn btn-primary btn-grey" (click)="printAsPdf()">
+              <fa name="print"></fa>
+            </button>
+          </div>
+        </div>
+
+      </div>
+      <form id="additionalForm" [formGroup]="additionalForm">
+        <img *ngIf="additionalLoading" class="pl-3"
+          src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>File Name</label>
+              <input maxlength="100" type="text" placeholder="File Name" class="form-control" formControlName="fileName"
+                [ngClass]="{ 'is-invalid': additionalSubmitted && a.fileName.errors }" />
+              <div *ngIf="additionalSubmitted && a.fileName.errors" class="invalid-feedback">
+                <div *ngIf="a.fileName.errors.required">File Name is required</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Document Title</label>
+              <input id="documentTitle" maxlength="100" type="text" placeholder="Document Title" class="form-control"
+                formControlName="documentTitle"
+                [ngClass]="{ 'is-invalid': additionalSubmitted && a.documentTitle.errors }" />
+              <div *ngIf="additionalSubmitted && a.documentTitle.errors" class="invalid-feedback">
+                <div *ngIf="a.documentTitle.errors.required">Document Title is required</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Document Owner</label>
+              <input id="" maxlength="100" type="text" placeholder="Document Owner" class="form-control"
+                formControlName="documentOwner"
+                [ngClass]="{ 'is-invalid': additionalSubmitted && a.documentOwner.errors }" />
+              <div *ngIf="additionalSubmitted && a.documentOwner.errors" class="invalid-feedback">
+                <div *ngIf="a.documentOwner.errors.required">Document Owner is required</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label>Attachment</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+              </div>
+              <div class="custom-file">
+                <input (change)="fileChange($event, 'file')" type="file" aria-describedby="inputGroupFileAddon01"
+                  value="attachment" class="custom-file-input" />
+                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+              </div>
+            </div>
+            <label *ngIf="editDoc"><b>Previously selected file name is
+                <span class="doc-link" (click)="fnDownload(tempDocUrl)">{{tempDocName}}</span></b>
+            </label>
+          </div>
+          <!-- <div class="col-md-6">
+            <label>Document attachment</label>
+            <br>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+              </div>
+              <div class="custom-file">
+                <input (change)="fileChange($event, 'file')" maxlength="100" type="file" placeholder="attachment"
+                  class="custom-file-input" aria-describedby="inputGroupFileAddon01" />
+                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+              </div>
+            </div>
+          </div> -->
+        </div>
+
+
+      </form>
+    </div>
+  </div>
+</div>

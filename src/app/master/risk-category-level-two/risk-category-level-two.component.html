@@ -1,0 +1,93 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-light col-md-12">
+  <div class="col-md-6">
+    <button type="button" navdrpbtn="maindropdown" class="text-secondary btn ">
+      <span class="mainheadName">
+        &nbsp;Risk Category Level Two
+      </span>
+    </button>
+  </div>
+  <div class="col-md-6">
+    <button class="btn btn-primary pull-right mainheadbtn" *ngIf="setOption == 'Grid'" (click)="changeMenu('Add')"
+      title="For add new Category">
+      <fa name="plus"></fa>&nbsp;Add Risk Category Level Two
+    </button>
+    <div class="pull-right" *ngIf="setOption == 'Add'">
+      <button [disabled]="loading" *ngIf="canSave" class="btn btn-primary btn-grey" (click)="onSubmit();">
+        <fa name="save"></fa>
+      </button>&nbsp;
+      <button class="btn btn-primary btn-grey" (click)="changeMenu('Grid')">
+        <fa name="trash"></fa>
+      </button>&nbsp;
+      <button class="btn btn-primary btn-grey" (click)="exportAsXLSX()">
+        <fa name="file-excel-o"></fa>
+      </button>&nbsp;
+      <button class="btn btn-primary btn-grey" (click)="printAsPdf()">
+        <fa name="print"></fa>
+      </button>
+    </div>
+  </div>
+</nav>
+<div class="main-content" *ngIf="setOption == 'Grid'" (click)="changeMenu('Grid')">
+  <div class="card">
+    <div class="card-body">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6">
+
+              </div>
+              <div class="col-md-6">
+              </div>
+            </div>
+            <app-table-app (customDelete)="fnDelete($event)" (customEdit)="fnEdit($event)"
+              [customDatatableobj]="datatable"></app-table-app>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="main-content" *ngIf="setOption == 'Add'">
+  <div class="card">
+    <div class="card-body">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+
+            <div class="row">
+              <div class="col-md-12">
+                <form [formGroup]="riskCategoryLevelTwoForm" (ngSubmit)="onSubmit()">
+                  <alert></alert>
+                  <div class="form-group">
+                    <label for="riskCategoryLevelTwoName">Risk Category Level Two</label>
+                    <input maxlength="100" type="text" formControlName="riskCategoryLevelTwoName" class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && f.riskCategoryLevelTwoName.errors }" />
+                    <div *ngIf="submitted && f.riskCategoryLevelTwoName.errors" class="invalid-feedback">
+                      <div *ngIf="f.riskCategoryLevelTwoName.errors.required">Risk Category Level Two is required</div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="riskCategoryLevelTwoDescription"> Description</label>
+                    <textarea maxlength="1000" type="text" formControlName="riskCategoryLevelTwoDescription"
+                      class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && f.riskCategoryLevelTwoDescription.errors }"></textarea>
+                    <div *ngIf="submitted && f.riskCategoryLevelTwoDescription.errors" class="invalid-feedback">
+                      <div *ngIf="f.riskCategoryLevelTwoDescription.errors.required">Risk Category Level Two Description
+                        is
+                        required</div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <img *ngIf="loading" class="pl-3"
+                      src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

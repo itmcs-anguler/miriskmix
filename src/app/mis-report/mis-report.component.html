@@ -1,0 +1,68 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-6 chart-wrapper">
+        <h5 style="color: #ed5c0e;">Number of Risk Incident </h5><br>
+        <canvas baseChart [data]="doughnutChartData" [colors]="donutColors" [labels]="doughnutChartLabels"
+          [chartType]="doughnutChartType">
+        </canvas>
+      </div>
+      <div class="col-md-6">
+        <h5 style="color: #ed5c0e;">Number of Risk Incidents by Risk Category </h5>
+        <canvas baseChart [datasets]="barChartData" [colors]="barChartColors" [labels]="barChartLabels"
+          [options]="barChartOptions" [plugins]="barChartPlugins" [legend]="barChartLegend" [chartType]="barChartType">
+        </canvas>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <h5 style="color: #ed5c0e;">Number of High Risk (Residual Score greater than 15 Risk Incidents by Risk Category
+
+        </h5><br>
+        <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType"
+          [options]="pieChartOptions" [plugins]="pieChartPlugins" [legend]="pieChartLegend">
+        </canvas>
+      </div>
+      <div class="col-md-6">
+        <h5 style="color: #ed5c0e;">Number of High Risk (Residual Score between 8 and 12 Risk Incidents by Risk Category
+
+        </h5><br>
+        <canvas baseChart [data]="pieChartDatatwo" [labels]="pieChartLabelstwo" [chartType]="pieChartTypetwo"
+          [options]="pieChartOptionstwo" [plugins]="pieChartPluginstwo" [legend]="pieChartLegend">
+        </canvas>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col-md-6">
+        <h5 style="color: #ed5c0e;">Number of High Risk (Residual Score between 0 and 8 Risk Incidents by Risk Category
+
+        </h5><br>
+        <canvas baseChart [data]="pieChartDatathree" [labels]="pieChartLabelsthree" [chartType]="pieChartTypethree"
+          [options]="pieChartOptionsthree" [plugins]="pieChartPluginsthree" [legend]="pieChartLegend">
+        </canvas>
+      </div>
+      <div class="col-md-6">
+        <h5 style="color: #ed5c0e;">Asset Current Value $
+        </h5><br>
+        <canvas baseChart [datasets]="barChartDatatwo" [colors]="barChartColorstwo" [labels]="barChartLabelstwo"
+          [options]="barChartOptionstwo" [plugins]="barChartPluginstwo" [legend]="barChartLegendtwo"
+          [chartType]="barChartTypetwo">
+        </canvas>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <h4 style="color: #ed5c0e;">Document Status Overdue
+        </h4><br>
+        <canvas baseChart [datasets]="barChartDatathree" [colors]="barChartColorsthree" [labels]="barChartLabelsthree"
+          [options]="barChartOptionsthree" [plugins]="barChartPluginsthree" [legend]="barChartLegendthree"
+          [chartType]="barChartTypethree">
+        </canvas>
+      </div>
+    </div>
+  </div>
+</div>

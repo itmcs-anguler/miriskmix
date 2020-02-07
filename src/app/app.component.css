@@ -1,0 +1,36 @@
+.white-background{
+    background-color: white;
+}
+.jumbotron{
+    padding: 1rem 2rem !important;
+}
+ 
+.container{
+    max-width: 150%;
+}
+
+.formDefoucs{
+    opacity: 0.4;
+}
+
+.btn-grey{
+    background-color: grey;
+    border-color: grey;
+    color: white;
+}
+
+.iconedit{
+    color: #ed5c0e;
+    font-size: 20px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+* { 
+  font-size: 0.8rem;
+}
+
+.drpspancss{
+    margin:0% 0% 0% 0%;
+     padding:0% 0% 0% 0%;
+}

@@ -1,0 +1,120 @@
+<div style="margin-top: 8px;" class="card border-shadow" *ngIf="recoveries == 1">
+  <div class="card-body">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6">
+              <label>
+                <h3 style="color: #ed5c0e;"> Recoveries Impact</h3>
+              </label>
+            </div>
+            <div class="col-md-6">
+              <button class="btn btn-primary pull-right" (click)="changeMenuRecoveryImpact()"
+                title="For add new Recoveries">
+                <fa name="plus"></fa>&nbsp;Add Recoveries Impact
+              </button>
+            </div>
+          </div>
+          <app-table-app id="recoveryId" (customDelete)="fnDeleteRecovery($event)" (customEdit)="fnEditRecovery($event)"
+            [customDatatableobj]="datatableRecovery"></app-table-app>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top: 10px;" class="card card-body border-shadow" *ngIf="recoveriesShowHide == 1">
+  <form id="recoveriesForm" [formGroup]="recoveriesForm">
+    <img *ngIf="recoveriesLoading" class="pl-3"
+      src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+
+    <div class="row">
+      <div class="col-md-12">
+        <label>
+          <h3 style="color: #ed5c0e;"> Recoveries Impact Details</h3>
+        </label>
+        <div class="pull-right">
+          <button [disabled]="recoveriesLoading" *ngIf="canSave" class="btn btn-primary btn-grey" (click)="onSubmitRecoveries();">
+            <fa name="save"></fa>
+          </button>&nbsp;
+          <button class="btn btn-primary btn-grey" (click)="cancelMenurecoveries()">
+            <fa name="trash"></fa>
+          </button>&nbsp;
+          <button class="btn btn-primary btn-grey">
+            <fa name="file-excel-o"></fa>
+          </button>&nbsp;
+          <button class="btn btn-primary btn-grey">
+            <fa name="print"></fa>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>CCY</label>
+          <app-select-app [selectedVal]="drpCCYvalue" [mainLabelRequired]="false" [mainlabel]="CCYLabel"
+            [mainlabelclass]="" (customChange)="fnSetValRecovery($event,'ccy')" [mainid]="CCYid"
+            [optionsValues]="CCYOptions"></app-select-app>
+          <input type="hidden" class="form-control" formControlName="uniqueId" />
+          <div *ngIf="recoveriesSubmitted && r.ccy.errors" class="invalid-feedback">
+            <div *ngIf="r.ccy.errors.required">CCY is required</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Amount</label>
+          <input maxlength="100" type="hidden" formControlName='riskIncident' />
+          <input maxlength="100" type="number" placeholder="Amount" class="form-control" formControlName="amount"
+            [ngClass]="{ 'is-invalid': recoveriesSubmitted && r.amount.errors }" />
+          <div *ngIf="recoveriesSubmitted && r.amount.errors" class="invalid-feedback">
+            <div *ngIf="r.amount.errors.required">Amount is required</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>GL Reference</label>
+          <input maxlength="100" type="text" placeholder="GL Reference" class="form-control"
+            formControlName="glReference" [ngClass]="{ 'is-invalid': recoveriesSubmitted && r.glReference.errors }" />
+          <div *ngIf="recoveriesSubmitted && r.glReference.errors" class="invalid-feedback">
+            <div *ngIf="r.glReference.errors.required">GL Reference is required</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Impact Date</label>
+          <input maxlength="100" type="text" [owlDateTimeTrigger]="impactDate" [owlDateTime]="impactDate"
+            placeholder="Incident Date" class="form-control" formControlName="impactDate"
+            [ngClass]="{ 'is-invalid': recoveriesSubmitted && r.impactDate.errors }" />
+          <owl-date-time [pickerType]="'calendar'" #impactDate></owl-date-time>
+          <div *ngIf="recoveriesSubmitted && r.impactDate.errors" class="invalid-feedback">
+            <div *ngIf="r.impactDate.errors.required">Impact Date is required</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Description</label>
+          <textarea maxlength="1000" type="text" placeholder="Description" class="form-control"
+            formControlName="description" [ngClass]="{ 'is-invalid': recoveriesSubmitted && r.description.errors }">
+                </textarea>
+          <div *ngIf="recoveriesSubmitted && r.description.errors" class="invalid-feedback">
+            <div *ngIf="r.description.errors.required">Description is required</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

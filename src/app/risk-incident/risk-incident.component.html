@@ -1,0 +1,372 @@
+<!-- <div class="main-content" *ngIf="setOption == 'Incident'"> -->
+<div class="main-content" *ngIf="classReference.incidentOption == 'search'">
+
+  <div class="card" style="padding: 20px;">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="form-group">
+          <label class="lblgrey18bold"><b>Incident Title</b></label>
+          <input id="incidentTitleId" type="text" (keyup)="fnCustomSearchSet($event,'incidentTitle')"
+            placeholder="Incident Title" class="form-control" />
+        </div>
+
+      </div>
+      <div class="col-md-3">
+        <label class="lblgrey18bold"><b>Event Occurrence Date</b></label>
+        <input type="text" [(ngModel)]="occurrenceDate" [owlDateTimeTrigger]="eventOccurrenceDateSearch"
+          [owlDateTime]="eventOccurrenceDateSearch" placeholder="Event Occurrence Date" class="form-control" />
+        <owl-date-time [pickerType]="'calendar'" #eventOccurrenceDateSearch></owl-date-time>
+
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <label class="lblgrey18bold"><b>Owner Name</b></label>
+          <input id="ownerId" type="text" (keyup)="fnCustomSearchSet($event,'owner')" placeholder="Owner Name"
+            class="form-control" />
+        </div>
+      </div>
+      <div class="col-md-3"></div>
+    </div>
+    <div class="row text-center">
+      <div class="col-md-12">
+        <button (click)="fnSearch();" class="btn btn-primary mainheadbtn" title="For Search Risk Incident">
+          <fa name="search"></fa>&nbsp;Search
+        </button>&nbsp;
+        <button (click)="fnReset()" class="btn btn-primary" title="For Reset Risk Register">
+          <fa name="refresh"></fa>&nbsp;Reset
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card" *ngIf="datatableHideShow=='show'">
+    <div class="card-body">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6">
+
+              </div>
+              <!-- <div class="col-md-6">
+                <button class="btn btn-primary pull-right" (click)="changeIncidentMenu()" title="For add new Category">
+                  <fa name="plus"></fa>&nbsp;Add Risk Incident
+                </button>
+              </div> -->
+            </div>
+            <div style="margin-top: 10px;">
+              <app-table-app id="incidentId" (customDelete)="fnDelete($event)" (customEdit)="fnEdit($event)"
+                [customDatatableobj]="datatable"></app-table-app>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main-content" *ngIf="classReference.incidentOption == 'add'">
+  <!-- <div class="main-content" *ngIf=" (IncidentShowHide == 1) && (setOption == 'none')"> -->
+  <div class="card">
+    <div class="card-body">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+            <label>
+              <h3 style="color: #ed5c0e;"> Risk Incident Details </h3>
+            </label>
+            <div class="pull-right">
+              <button [disabled]="loading" *ngIf="canSave" class="btn btn-primary btn-grey" (click)="onSubmit();">
+                <fa name="save"></fa>
+              </button>&nbsp;
+              <button class="btn btn-primary btn-grey" (click)="cancelIncidentMenu();">
+                <fa name="trash"></fa>
+              </button>&nbsp;
+              <button class="btn btn-primary btn-grey" (click)="exportAsXLSX()">
+                <fa name="file-excel-o"></fa>
+              </button>&nbsp;
+              <button class="btn btn-primary btn-grey" (click)="printAsPdf()">
+                <fa name="print"></fa>
+              </button>
+            </div>
+            <form id="riskIncidentForm" [formGroup]="riskIncidentForm">
+              <img *ngIf="loading" class="pl-3"
+                src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Incident Title</label>
+                    <input maxlength="100" type="text" placeholder="Incident Title" class="form-control"
+                      formControlName="incidentTitle"
+                      [ngClass]="{ 'is-invalid': submitted && f.incidentTitle.errors }" />
+                    <div *ngIf="submitted && f.incidentTitle.errors" class="invalid-feedback">
+                      <div *ngIf="f.incidentTitle.errors.required">Incident Title is required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Internal or External</label>
+                    <app-select-app [selectedVal]="drpInternalorExternalvalue" [mainLabelRequired]="false"
+                      [mainlabel]="internalorExternalLabel" [mainlabelclass]="internalorExternalLabelClass"
+                      [mainid]="internalorExternalID" (customChange)="fnSetVal($event,'internalorExternal')"
+                      [optionsValues]="internalorExternalOptions"></app-select-app>
+                    <div *ngIf="submitted && f.internalorExternal.errors" class="invalid-feedback">
+                      <div *ngIf="f.internalorExternal.errors.required">Internal or External is required</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Owner</label>
+                    <input maxlength="100" type="text" placeholder="Owner" class="form-control" formControlName="owner"
+                      [ngClass]="{ 'is-invalid': submitted && f.owner.errors }" />
+                    <div *ngIf="submitted && f.owner.errors" class="invalid-feedback">
+                      <div *ngIf="f.owner.errors.required">Owner is required</div>
+                    </div>
+                    <input maxlength="100" type="hidden" class="form-control" formControlName="uniqueId" />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Description of Incident</label>
+                    <textarea maxlength="1000" placeholder="Description of Incident" class="form-control"
+                      formControlName="descriptionIncident"
+                      [ngClass]="{ 'is-invalid': submitted && f.descriptionIncident.errors }"></textarea>
+                    <div *ngIf="submitted && f.descriptionIncident.errors" class="invalid-feedback">
+                      <div *ngIf="f.descriptionIncident.errors.required">Description of Incident is required</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Event Occurrence Date</label>
+                    <input maxlength="100" [owlDateTimeTrigger]="dt" [owlDateTime]="dt"
+                      placeholder="Event Occurrence Date" type="text" class="form-control" formControlName="occurrence"
+                      [ngClass]="{ 'is-invalid': submitted && f.occurrence.errors }" />
+                    <owl-date-time [pickerType]="'calendar'" #dt></owl-date-time>
+                    <div *ngIf="submitted && f.occurrence.errors" class="invalid-feedback">
+                      <div *ngIf="f.occurrence.errors.required">Event Occurrence Date is required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Date of Detection</label>
+                    <input maxlength="100" type="text" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2"
+                      placeholder="Date of Detection" class="form-control" formControlName="detection"
+                      [ngClass]="{ 'is-invalid': submitted && f.detection.errors }" />
+                    <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+                    <div *ngIf="submitted && f.detection.errors" class="invalid-feedback">
+                      <div *ngIf="f.detection.errors.required">Date of Detection is required</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Incident Close Date</label>
+                    <input maxlength="100" type="text" [owlDateTimeTrigger]="dt3" [owlDateTime]="dt3"
+                      placeholder="Incident Close Date" class="form-control" formControlName="incidentClose"
+                      [ngClass]="{ 'is-invalid': submitted && f.incidentClose.errors }" />
+                    <owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
+                    <div *ngIf="submitted && f.incidentClose.errors" class="invalid-feedback">
+                      <div *ngIf="f.incidentClose.errors.required">Incident Close Date is required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Event Type</label>
+                    <app-select-app [selectedVal]="drpEventTypevalue" [mainLabelRequired]="false"
+                      [mainlabel]="eventTypeLabel" [mainlabelclass]="" (customChange)="fnSetVal($event,'eventType')"
+                      [mainid]="eventTypeid" [optionsValues]="eventTypeOptions"></app-select-app>
+                    <!-- <select class="form-control" formControlName="eventType"
+                      [ngClass]="{ 'is-invalid': submitted && f.eventType.errors }">
+                      <option value="" disabled>Select Event Type</option>
+                      <option value="Risk Event">Risk Event</option>
+                      <option value="Near Miss">Near Miss</option>
+                    </select> -->
+                    <div *ngIf="submitted && f.eventType.errors" class="invalid-feedback">
+                      <div *ngIf="f.eventType.errors.required">Event Type is required</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Incident Reported By</label>
+                    <input maxlength="100" type="text" placeholder="Incident Reported By" class="form-control"
+                      formControlName="incidentReported"
+                      [ngClass]="{ 'is-invalid': submitted && f.incidentReported.errors }" />
+                    <div *ngIf="submitted && f.incidentReported.errors" class="invalid-feedback">
+                      <div *ngIf="f.incidentReported.errors.required">Incident Reported By is required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Reportable to Regulator</label>
+                    <app-select-app [selectedVal]="drpReportabletoRegulatorvalue" [mainLabelRequired]="false"
+                      (customChange)="fnSetVal($event,'reportabletoRegulator')" [mainlabel]="reportabletoRegulatorLabel"
+                      [mainlabelclass]="" [mainid]="reportabletoRegulatorId"
+                      [optionsValues]="reportabletoRegulatorOptions">
+                    </app-select-app>
+
+
+                    <!-- <select class="form-control" formControlName="reportabletoRegulator"
+                      [ngClass]="{ 'is-invalid': submitted && f.reportabletoRegulator.errors }">
+                      <option value="" disabled>Select Reportable to Regulator</option>
+                      <option value="YES">YES</option>
+                      <option value="NO">NO</option>
+                    </select> -->
+
+                    <div *ngIf="submitted && f.reportabletoRegulator.errors" class="invalid-feedback">
+                      <div *ngIf="f.reportabletoRegulator.errors.required">Reportable to Regulator By is required</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Number of People Impacted</label>
+                    <input maxlength="100" placeholder="Number of People Impacted" type="number" class="form-control"
+                      formControlName="numberofPeople"
+                      [ngClass]="{ 'is-invalid': submitted && f.numberofPeople.errors }" />
+                    <div *ngIf="submitted && f.numberofPeople.errors" class="invalid-feedback">
+                      <div *ngIf="f.numberofPeople.errors.required">Number of People Impacted is required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Location</label>
+                    <input maxlength="100" placeholder="Location" type="text" class="form-control"
+                      formControlName="location" [ngClass]="{ 'is-invalid': submitted && f.location.errors }" />
+                    <div *ngIf="submitted && f.location.errors" class="invalid-feedback">
+                      <div *ngIf="f.location.errors.required">Location is required</div>
+                    </div>
+
+                    <!-- <app-select-app [selectedVal]="drpLocationvalue" [mainLabelRequired]="false"
+                      [mainlabel]="locationLabel" (customChange)="fnSetVal($event,'location')" [mainlabelclass]=""
+                      [mainid]="locationId" [optionsValues]="locationOptions"></app-select-app> -->
+
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Event Status</label>
+                    <app-select-app [selectedVal]="drpEventStatusvalue" [mainLabelRequired]="false"
+                      [mainlabel]="eventStatusLabel" [mainlabelclass]="" (customChange)="fnSetVal($event,'eventStatus')"
+                      [mainid]="eventStatusid" [optionsValues]="eventStatusOptions"></app-select-app>
+
+                    <!-- <select class="form-control" formControlName="eventStatus"
+                      [ngClass]="{ 'is-invalid': submitted && f.eventStatus.errors }">
+                      <option value="" disabled>Select Event Status</option>
+                      <option value="Open">Open</option>
+                      <option value="Closed">Closed</option>
+                    </select> -->
+                    <div *ngIf="submitted && f.eventStatus.errors" class="invalid-feedback">
+                      <div *ngIf="f.eventStatus.errors.required">Event Status is required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Risk Category Level One</label>
+                    <app-select-app [selectedVal]="drpRiskCategoryOnevalue" [mainLabelRequired]="false"
+                      [mainlabel]="riskCategoryOneLabel" [mainlabelclass]=""
+                      (customChange)="fnSetVal($event,'riskCategoryOne')" [mainid]="riskCategoryOneId"
+                      [optionsValues]="riskCategoryOneOptions"></app-select-app>
+
+                    <!-- <select class="form-control" formControlName="riskCategoryOne"
+                      [ngClass]="{ 'is-invalid': submitted && f.riskCategoryOne.errors }">
+                      <option value="" disabled>Select Risk Category Level 1</option>
+                      <option value="Option 1">Option 1</option>
+                    </select> -->
+                    <div *ngIf="submitted && f.riskCategoryOne.errors" class="invalid-feedback">
+                      <div *ngIf="f.riskCategoryOne.errors.required">Risk Category Level 1 is required</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Risk Category Level Two</label>
+                    <app-select-app [selectedVal]="drpRiskCategoryTwovalue" [mainLabelRequired]="false"
+                      [mainlabel]="riskCategoryTwoLabel" [mainlabelclass]=""
+                      (customChange)="fnSetVal($event,'riskCategoryTwo')" [mainid]="riskCategoryTwoId"
+                      [optionsValues]="riskCategoryTwoOptions"></app-select-app>
+
+                    <!-- <select class="form-control" formControlName="riskCategoryTwo"
+                      [ngClass]="{ 'is-invalid': submitted && f.riskCategoryTwo.errors }">
+                      <option value="" disabled>Select Risk Category Level 2</option>
+                      <option value="Option 1">Option 1</option>
+                    </select> -->
+                    <div *ngIf="submitted && f.riskCategoryTwo.errors" class="invalid-feedback">
+                      <div *ngIf="f.riskCategoryTwo.errors.required">Risk Category Level 2 is required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Remediation Plan</label>
+                    <input maxlength="100" type="text" placeholder="Remediation Plan" class="form-control"
+                      formControlName="remediationPlan"
+                      [ngClass]="{ 'is-invalid': submitted && f.remediationPlan.errors }" />
+                    <div *ngIf="submitted && f.remediationPlan.errors" class="invalid-feedback">
+                      <div *ngIf="f.remediationPlan.errors.required">Remediation Plan is required</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Remediation Action Owner</label>
+                    <input maxlength="100" type="text" placeholder="Remediation Action Owner" class="form-control"
+                      formControlName="remediationActionOwner"
+                      [ngClass]="{ 'is-invalid': submitted && f.remediationActionOwner.errors }" />
+                    <div *ngIf="submitted && f.remediationActionOwner.errors" class="invalid-feedback">
+                      <div *ngIf="f.remediationActionOwner.errors.required">Remediation Action Owner is required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Notes</label>
+                    <input maxlength="100" type="text" placeholder="Notes" class="form-control" formControlName="notes"
+                      [ngClass]="{ 'is-invalid': submitted && f.notes.errors }" />
+                    <div *ngIf="submitted && f.notes.errors" class="invalid-feedback">
+                      <div *ngIf="f.notes.errors.required">Notes is required</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

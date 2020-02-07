@@ -1,0 +1,33 @@
+<div class="row" *ngIf="!customDatatableobj.custominput">
+  <div class="col-md-12 table-responsive">
+    <table [id]="tableId" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+    </table>
+  </div>
+</div>
+<div class="row" *ngIf="customDatatableobj.custominput">
+  <div class="col-md-12 table-responsive">
+    <table [id]="tableId" datatable [dtOptions]="dtOptionsCustom" class="row-border hover">
+      <thead>
+        <tr>
+          <th *ngFor="let column of customDatatableobj.customcols; let i = index">{{ column }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Risk Register</td>
+          <td><input type="checkbox"></td>
+          <td><input type="checkbox"></td>
+          <td><input type="checkbox"></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Asset Register</td>
+          <td><input type="checkbox"></td>
+          <td><input type="checkbox"></td>
+          <td><input type="checkbox"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,797 @@
+<ul class="nav nav-tabs navbar-dark bg-light navbar navbar-expand-lg" id="myTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" (click)="getOption('Incident');navClick()"><span class="mainheadName">
+        <!-- <fa name="exclamation-triangle"></fa>&nbsp; -->
+        Risk Incident
+      </span></a>
+  </li>
+  <li class="nav-item">
+    <a id="fin" class="nav-link" (click)="getOption('Financial'); navClick();  "><span class="mainheadName">
+        <!-- <fa name="usd"></fa>&nbsp;--> Financial
+
+      </span></a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link " (click)="getOption('Root');navClick()"><span class="mainheadName">
+        <!-- <fa name="check-square"></fa>&nbsp; -->
+        Root Cause
+
+      </span></a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link " (click)="getOption('Document');navClick()"><span class="mainheadName">
+        <!-- <fa name="check-square"></fa>&nbsp;  -->
+        Additional Details
+
+      </span></a>
+  </li>
+</ul>
+
+<div class="main-content" *ngIf="setOption == 'Incident'">
+  <div class="card" style="padding: 20px;">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="form-group">
+          <label class="lblgrey18bold"><b>Incident Title</b></label>
+          <input type="text" placeholder="Incident Title" class="form-control" />
+          <!-- <app-select-app [mainlabel]="incidentTitleLabel" [mainlabelclass]="incidentTitleLabelClass"
+            [mainid]="IncidentTitleName" [optionsValues]="preparedincidentTitleOptions"></app-select-app> -->
+        </div>
+
+      </div>
+      <div class="col-md-3">
+        <label class="lblgrey18bold"><b>Event Occurrence Date</b></label>
+        <input type="text" [owlDateTimeTrigger]="eventOccurrenceDateSearch" [owlDateTime]="eventOccurrenceDateSearch"
+          placeholder="Event Occurrence Date" class="form-control" />
+        <owl-date-time [pickerType]="'calendar'" #eventOccurrenceDateSearch></owl-date-time>
+
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <label class="lblgrey18bold"><b>Owner Name</b></label>
+          <input type="text" placeholder="Owner Name" class="form-control" />
+          <!-- <app-select-app [mainlabel]="ownerLabel" [mainlabelclass]="ownerLabelClass" [mainid]="ownerid"
+            [optionsValues]="preparedownerOptions"></app-select-app> -->
+        </div>
+      </div>
+      <div class="col-md-3"></div>
+    </div>
+    <div class="row text-center">
+      <div class="col-md-12">
+        <button class="btn btn-primary mainheadbtn" title="For Search Risk Incident">
+          <fa name="search"></fa>&nbsp;Search
+        </button>&nbsp;
+        <button class="btn btn-primary" title="For Reset Risk Register">
+          <fa name="refresh"></fa>&nbsp;Reset
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6">
+
+              </div>
+              <div class="col-md-6">
+                <button class="btn btn-primary pull-right" (click)="changeIncidentMenu()" title="For add new Category">
+                  <fa name="plus"></fa>&nbsp;Add Risk Incident
+                </button>
+              </div>
+            </div>
+            <div style="margin-top: 10px;">
+              <app-table-app id="incidentId" (customDelete)="fnDelete($event)" (customEdit)="fnEdit($event)"
+                [customDatatableobj]="datatable"></app-table-app>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="main-content" *ngIf=" (IncidentShowHide == 1) && (setOption == 'none')">
+  <div class="card">
+    <div class="card-body">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+            <label>
+              <h3 style="color: #ed5c0e;"> Risk Incident Details </h3>
+            </label>
+            <div class="pull-right">
+              <button [disabled]="loading" class="btn btn-primary btn-grey" (click)="onSubmit();">
+                <fa name="save"></fa>
+              </button>&nbsp;
+              <button class="btn btn-primary btn-grey" (click)="cancelIncidentMenu();">
+                <fa name="trash"></fa>
+              </button>&nbsp;
+              <button class="btn btn-primary btn-grey">
+                <fa name="file-excel-o"></fa>
+              </button>&nbsp;
+              <button class="btn btn-primary btn-grey">
+                <fa name="print"></fa>
+              </button>
+            </div>
+            <form id="riskEventForm" [formGroup]="riskEventForm">
+              <img *ngIf="loading" class="pl-3"
+                src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Incident Title</label>
+                    <input maxlength="100" type="text" placeholder="Incident Title" class="form-control"
+                      formControlName="incidentTitle"
+                      [ngClass]="{ 'is-invalid': submitted && f.incidentTitle.errors }" />
+                    <div *ngIf="submitted && f.incidentTitle.errors" class="invalid-feedback">
+                      <div *ngIf="f.incidentTitle.errors.required">Incident Title is required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Internal or External</label>
+                    <app-select-app [selectedVal]="drpInternalorExternalvalue" [mainLabelRequired]="false"
+                      [mainlabel]="internalorExternalLabel" [mainlabelclass]="internalorExternalLabelClass"
+                      [mainid]="internalorExternalID" (customChange)="fnSetVal($event,'internalorExternal')"
+                      [optionsValues]="internalorExternalOptions"></app-select-app>
+                    <div *ngIf="submitted && f.internalorExternal.errors" class="invalid-feedback">
+                      <div *ngIf="f.internalorExternal.errors.required">Internal or External is required</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Owner</label>
+                    <input maxlength="100" type="text" placeholder="Owner" class="form-control" formControlName="owner"
+                      [ngClass]="{ 'is-invalid': submitted && f.owner.errors }" />
+                    <div *ngIf="submitted && f.owner.errors" class="invalid-feedback">
+                      <div *ngIf="f.owner.errors.required">Owner is required</div>
+                    </div>
+                    <input maxlength="100" type="hidden" class="form-control" formControlName="uniqueId" />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Description of Incident</label>
+                    <textarea maxlength="1000" placeholder="Description of Incident" class="form-control"
+                      formControlName="descriptionIncident"
+                      [ngClass]="{ 'is-invalid': submitted && f.descriptionIncident.errors }"></textarea>
+                    <div *ngIf="submitted && f.descriptionIncident.errors" class="invalid-feedback">
+                      <div *ngIf="f.descriptionIncident.errors.required">Description of Incident is required</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Event Occurrence Date</label>
+                    <input maxlength="100" [owlDateTimeTrigger]="dt" [owlDateTime]="dt"
+                      placeholder="Event Occurrence Date" type="text" class="form-control" formControlName="occurrence"
+                      [ngClass]="{ 'is-invalid': submitted && f.occurrence.errors }" />
+                    <owl-date-time [pickerType]="'calendar'" #dt></owl-date-time>
+                    <div *ngIf="submitted && f.occurrence.errors" class="invalid-feedback">
+                      <div *ngIf="f.occurrence.errors.required">Event Occurrence Date is required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Date of Detection</label>
+                    <input maxlength="100" type="text" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2"
+                      placeholder="Date of Detection" class="form-control" formControlName="detection"
+                      [ngClass]="{ 'is-invalid': submitted && f.detection.errors }" />
+                    <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+                    <div *ngIf="submitted && f.detection.errors" class="invalid-feedback">
+                      <div *ngIf="f.detection.errors.required">Date of Detection is required</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Incident Close Date</label>
+                    <input maxlength="100" type="text" [owlDateTimeTrigger]="dt3" [owlDateTime]="dt3"
+                      placeholder="Incident Close Date" class="form-control" formControlName="incidentClose"
+                      [ngClass]="{ 'is-invalid': submitted && f.incidentClose.errors }" />
+                    <owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
+                    <div *ngIf="submitted && f.incidentClose.errors" class="invalid-feedback">
+                      <div *ngIf="f.incidentClose.errors.required">Incident Close Date is required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Event Type</label>
+                    <app-select-app [selectedVal]="drpEventTypevalue" [mainLabelRequired]="false"
+                      [mainlabel]="eventTypeLabel" [mainlabelclass]="" (customChange)="fnSetVal($event,'eventType')"
+                      [mainid]="eventTypeid" [optionsValues]="eventTypeOptions"></app-select-app>
+                    <!-- <select class="form-control" formControlName="eventType"
+                      [ngClass]="{ 'is-invalid': submitted && f.eventType.errors }">
+                      <option value="" disabled>Select Event Type</option>
+                      <option value="Risk Event">Risk Event</option>
+                      <option value="Near Miss">Near Miss</option>
+                    </select> -->
+                    <div *ngIf="submitted && f.eventType.errors" class="invalid-feedback">
+                      <div *ngIf="f.eventType.errors.required">Event Type is required</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Incident Reported By</label>
+                    <input maxlength="100" type="text" placeholder="Incident Reported By" class="form-control"
+                      formControlName="incidentReported"
+                      [ngClass]="{ 'is-invalid': submitted && f.incidentReported.errors }" />
+                    <div *ngIf="submitted && f.incidentReported.errors" class="invalid-feedback">
+                      <div *ngIf="f.incidentReported.errors.required">Incident Reported By is required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Reportable to Regulator</label>
+                    <app-select-app [selectedVal]="drpReportabletoRegulatorvalue" [mainLabelRequired]="false"
+                      (customChange)="fnSetVal($event,'reportabletoRegulator')" [mainlabel]="reportabletoRegulatorLabel"
+                      [mainlabelclass]="" [mainid]="reportabletoRegulatorId"
+                      [optionsValues]="reportabletoRegulatorOptions">
+                    </app-select-app>
+
+
+                    <!-- <select class="form-control" formControlName="reportabletoRegulator"
+                      [ngClass]="{ 'is-invalid': submitted && f.reportabletoRegulator.errors }">
+                      <option value="" disabled>Select Reportable to Regulator</option>
+                      <option value="YES">YES</option>
+                      <option value="NO">NO</option>
+                    </select> -->
+
+                    <div *ngIf="submitted && f.reportabletoRegulator.errors" class="invalid-feedback">
+                      <div *ngIf="f.reportabletoRegulator.errors.required">Reportable to Regulator By is required</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Number of People Impacted</label>
+                    <input maxlength="100" placeholder="Number of People Impacted" type="number" class="form-control"
+                      formControlName="numberofPeople"
+                      [ngClass]="{ 'is-invalid': submitted && f.numberofPeople.errors }" />
+                    <div *ngIf="submitted && f.numberofPeople.errors" class="invalid-feedback">
+                      <div *ngIf="f.numberofPeople.errors.required">Number of People Impacted is required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Location</label>
+                    <app-select-app [selectedVal]="drpLocationvalue" [mainLabelRequired]="false"
+                      [mainlabel]="locationLabel" (customChange)="fnSetVal($event,'location')" [mainlabelclass]=""
+                      [mainid]="locationId" [optionsValues]="locationOptions"></app-select-app>
+
+                    <!-- <select class="form-control" formControlName="location"
+                      [ngClass]="{ 'is-invalid': submitted && f.location.errors }">
+                      <option value="" disabled>Select Location</option>
+                      <option value="London">London</option>
+                      <option value="Manchester">Manchester</option>
+                    </select> -->
+                    <div *ngIf="submitted && f.location.errors" class="invalid-feedback">
+                      <div *ngIf="f.location.errors.required">Location is required</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Event Status</label>
+                    <app-select-app [selectedVal]="drpEventStatusvalue" [mainLabelRequired]="false"
+                      [mainlabel]="eventStatusLabel" [mainlabelclass]="" (customChange)="fnSetVal($event,'eventStatus')"
+                      [mainid]="eventStatusid" [optionsValues]="eventStatusOptions"></app-select-app>
+
+                    <!-- <select class="form-control" formControlName="eventStatus"
+                      [ngClass]="{ 'is-invalid': submitted && f.eventStatus.errors }">
+                      <option value="" disabled>Select Event Status</option>
+                      <option value="Open">Open</option>
+                      <option value="Closed">Closed</option>
+                    </select> -->
+                    <div *ngIf="submitted && f.eventStatus.errors" class="invalid-feedback">
+                      <div *ngIf="f.eventStatus.errors.required">Event Status is required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Risk Category Level One</label>
+                    <app-select-app [selectedVal]="drpRiskCategoryOnevalue" [mainLabelRequired]="false"
+                      [mainlabel]="riskCategoryOneLabel" [mainlabelclass]=""
+                      (customChange)="fnSetVal($event,'riskCategoryOne')" [mainid]="riskCategoryOneId"
+                      [optionsValues]="riskCategoryOneOptions"></app-select-app>
+
+                    <!-- <select class="form-control" formControlName="riskCategoryOne"
+                      [ngClass]="{ 'is-invalid': submitted && f.riskCategoryOne.errors }">
+                      <option value="" disabled>Select Risk Category Level 1</option>
+                      <option value="Option 1">Option 1</option>
+                    </select> -->
+                    <div *ngIf="submitted && f.riskCategoryOne.errors" class="invalid-feedback">
+                      <div *ngIf="f.riskCategoryOne.errors.required">Risk Category Level 1 is required</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Risk Category Level Two</label>
+                    <app-select-app [selectedVal]="drpRiskCategoryTwovalue" [mainLabelRequired]="false"
+                      [mainlabel]="riskCategoryTwoLabel" [mainlabelclass]=""
+                      (customChange)="fnSetVal($event,'riskCategoryTwo')" [mainid]="riskCategoryTwoId"
+                      [optionsValues]="riskCategoryTwoOptions"></app-select-app>
+
+                    <!-- <select class="form-control" formControlName="riskCategoryTwo"
+                      [ngClass]="{ 'is-invalid': submitted && f.riskCategoryTwo.errors }">
+                      <option value="" disabled>Select Risk Category Level 2</option>
+                      <option value="Option 1">Option 1</option>
+                    </select> -->
+                    <div *ngIf="submitted && f.riskCategoryTwo.errors" class="invalid-feedback">
+                      <div *ngIf="f.riskCategoryTwo.errors.required">Risk Category Level 2 is required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Remediation Plan</label>
+                    <input maxlength="100" type="text" placeholder="Remediation Plan" class="form-control"
+                      formControlName="remediationPlan"
+                      [ngClass]="{ 'is-invalid': submitted && f.remediationPlan.errors }" />
+                    <div *ngIf="submitted && f.remediationPlan.errors" class="invalid-feedback">
+                      <div *ngIf="f.remediationPlan.errors.required">Remediation Plan is required</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Remediation Action Owner</label>
+                    <input maxlength="100" type="text" placeholder="Remediation Action Owner" class="form-control"
+                      formControlName="remediationActionOwner"
+                      [ngClass]="{ 'is-invalid': submitted && f.remediationActionOwner.errors }" />
+                    <div *ngIf="submitted && f.remediationActionOwner.errors" class="invalid-feedback">
+                      <div *ngIf="f.remediationActionOwner.errors.required">Remediation Action Owner is required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Notes</label>
+                    <input maxlength="100" type="text" placeholder="Notes" class="form-control" formControlName="notes"
+                      [ngClass]="{ 'is-invalid': submitted && f.notes.errors }" />
+                    <div *ngIf="submitted && f.notes.errors" class="invalid-feedback">
+                      <div *ngIf="f.notes.errors.required">Notes is required</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="main-content" *ngIf="setOption == 'Financial'">
+
+  <div>
+    <div class="card border-shadow" *ngIf="grossImpact">
+      <div class="card-body">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6">
+                  <label>
+                    <h3 style="color: #ed5c0e;"> Gross Impact</h3>
+                  </label>
+                </div>
+                <div class="col-md-6">
+                  <button class="btn btn-primary pull-right" (click)="changeMenuGrossImpact()"
+                    title="For add new Category">
+                    <fa name="plus"></fa>&nbsp;Add Gross Impact
+                  </button>
+                </div>
+              </div>
+              <app-table-app id="grossImpactId" (customDelete)="fnDeleteGrossImpact($event)"
+                (customEdit)="fnEditGrossImpact($event)" [customDatatableobj]="datatableGrossImpact"></app-table-app>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-body border-shadow" *ngIf="grossImpactFormShow == 1">
+      <form id="grossImpactForm" [formGroup]="grossImpactForm">
+        <img *ngIf="grossImpactLoading" class="pl-3"
+          src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+        <div class="row">
+          <div class="col-md-12">
+            <label>
+              <h3 style="color: #ed5c0e;"> Gross Impact Details</h3>
+            </label>
+            <div class="pull-right">
+              <button [disabled]="grossImpactLoading" class="btn btn-primary btn-grey" (click)="onSubmitGrossImpact();">
+                <fa name="save"></fa>
+              </button>&nbsp;
+              <button class="btn btn-primary btn-grey" (click)="cancelMenuGrossImpact()">
+                <fa name="trash"></fa>
+              </button>&nbsp;
+              <button class="btn btn-primary btn-grey">
+                <fa name="file-excel-o"></fa>
+              </button>&nbsp;
+              <button class="btn btn-primary btn-grey">
+                <fa name="print"></fa>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>CCY</label>
+              <app-select-app [selectedVal]="drpCCYvalue" [mainLabelRequired]="false" [mainlabel]="CCYLabel"
+                [mainlabelclass]="" (customChange)="fnSetValGrossDp($event,'ccy')" [mainid]="CCYid"
+                [optionsValues]="CCYOptions"></app-select-app>
+              <div *ngIf="grossImpactSubmitted && g.ccy.errors" class="invalid-feedback">
+                <div *ngIf="g.ccy.errors.required">CCY is required</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Amount</label>
+              <input maxlength="100" type="text" placeholder="Amount" class="form-control" formControlName="amount"
+                [ngClass]="{ 'is-invalid': grossImpactSubmitted && g.amount.errors }" />
+              <div *ngIf="grossImpactSubmitted && g.amount.errors" class="invalid-feedback">
+                <div *ngIf="g.amount.errors.required">Amount is required</div>
+              </div>
+              <input type="hidden" class="form-control" formControlName="uniqueId" />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>GL Reference</label>
+              <input maxlength="100" type="text" placeholder="GL Reference" class="form-control"
+                formControlName="glReference"
+                [ngClass]="{ 'is-invalid': grossImpactSubmitted && g.glReference.errors }" />
+              <div *ngIf="grossImpactSubmitted && g.glReference.errors" class="invalid-feedback">
+                <div *ngIf="g.glReference.errors.required">GL Reference is required</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Impact Date</label>
+              <input maxlength="100" [owlDateTimeTrigger]="impactDt" [owlDateTime]="impactDt" type="text"
+                placeholder="Impact Date" class="form-control" formControlName="impactDate"
+                [ngClass]="{ 'is-invalid': grossImpactSubmitted && g.impactDate.errors }" />
+              <owl-date-time [pickerType]="'calendar'" #impactDt></owl-date-time>
+              <div *ngIf="grossImpactSubmitted && g.impactDate.errors" class="invalid-feedback">
+                <div *ngIf="g.impactDate.errors.required">Impact Date is required</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Description</label>
+              <textarea maxlength="1000" type="text" placeholder="Description" class="form-control"
+                formControlName="description"
+                [ngClass]="{ 'is-invalid': grossImpactSubmitted && g.description.errors }">
+                                    </textarea>
+              <div *ngIf="grossImpactSubmitted && g.description.errors" class="invalid-feedback">
+                <div *ngIf="g.description.errors.required">Description is required</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div style="margin-top: 8px;" class="card border-shadow" *ngIf="recoveries == 1">
+      <div class="card-body">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-6">
+                  <label>
+                    <h3 style="color: #ed5c0e;"> Recoveries Impact</h3>
+                  </label>
+                </div>
+                <div class="col-md-6">
+                  <button class="btn btn-primary pull-right" (click)="changeMenuRecoveryImpact()"
+                    title="For add new Recoveries">
+                    <fa name="plus"></fa>&nbsp;Add Recoveries Impact
+                  </button>
+                </div>
+              </div>
+              <app-table-app id="recoveryId" (customDelete)="fnDeleteRecovery($event)"
+                (customEdit)="fnEditRecovery($event)" [customDatatableobj]="datatableRecovery"></app-table-app>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 10px;" class="card card-body border-shadow" *ngIf="recoveriesShowHide == 1">
+      <form id="recoveriesForm" [formGroup]="recoveriesForm">
+        <img *ngIf="recoveriesLoading" class="pl-3"
+          src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+
+        <div class="row">
+          <div class="col-md-12">
+            <label>
+              <h3 style="color: #ed5c0e;"> Recoveries Impact Details</h3>
+            </label>
+            <div class="pull-right">
+              <button [disabled]="recoveriesLoading" class="btn btn-primary btn-grey" (click)="onSubmitRecoveries();">
+                <fa name="save"></fa>
+              </button>&nbsp;
+              <button class="btn btn-primary btn-grey" (click)="cancelMenurecoveries()">
+                <fa name="trash"></fa>
+              </button>&nbsp;
+              <button class="btn btn-primary btn-grey">
+                <fa name="file-excel-o"></fa>
+              </button>&nbsp;
+              <button class="btn btn-primary btn-grey">
+                <fa name="print"></fa>
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>CCY</label>
+              <app-select-app [selectedVal]="drpCCYvalue" [mainLabelRequired]="false" [mainlabel]="CCYLabel"
+                [mainlabelclass]="" (customChange)="fnSetValRecovery($event,'ccy')" [mainid]="CCYid"
+                [optionsValues]="CCYOptions"></app-select-app>
+              <input type="hidden" class="form-control" formControlName="uniqueId" />
+              <div *ngIf="recoveriesSubmitted && r.ccy.errors" class="invalid-feedback">
+                <div *ngIf="r.ccy.errors.required">CCY is required</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Amount</label>
+              <input maxlength="100" type="text" placeholder="Amount" class="form-control" formControlName="amount"
+                [ngClass]="{ 'is-invalid': recoveriesSubmitted && r.amount.errors }" />
+              <div *ngIf="recoveriesSubmitted && r.amount.errors" class="invalid-feedback">
+                <div *ngIf="r.amount.errors.required">Amount is required</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>GL Reference</label>
+              <input maxlength="100" type="text" placeholder="GL Reference" class="form-control"
+                formControlName="glReference"
+                [ngClass]="{ 'is-invalid': recoveriesSubmitted && r.glReference.errors }" />
+              <div *ngIf="recoveriesSubmitted && r.glReference.errors" class="invalid-feedback">
+                <div *ngIf="r.glReference.errors.required">GL Reference is required</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Impact Date</label>
+              <input maxlength="100" type="text" [owlDateTimeTrigger]="impactDate" [owlDateTime]="impactDate"
+                placeholder="Incident Date" class="form-control" formControlName="impactDate"
+                [ngClass]="{ 'is-invalid': recoveriesSubmitted && r.impactDate.errors }" />
+              <owl-date-time [pickerType]="'calendar'" #impactDate></owl-date-time>
+              <div *ngIf="recoveriesSubmitted && r.impactDate.errors" class="invalid-feedback">
+                <div *ngIf="r.impactDate.errors.required">Impact Date is required</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Description</label>
+              <textarea maxlength="1000" type="text" placeholder="Description" class="form-control"
+                formControlName="description" [ngClass]="{ 'is-invalid': recoveriesSubmitted && r.description.errors }">
+                </textarea>
+              <div *ngIf="recoveriesSubmitted && r.description.errors" class="invalid-feedback">
+                <div *ngIf="r.description.errors.required">Description is required</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="main-content" *ngIf="setOption == 'Root'">
+  <div class="card">
+    <div class="card-body">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="pull-right">
+              <button [disabled]="loading" (click)="onSubmitRootCause()" class="btn btn-primary btn-grey">
+                <fa name="save"></fa>
+              </button>&nbsp;
+              <button class="btn btn-primary btn-grey">
+                <fa name="trash"></fa>
+              </button>&nbsp;
+            </div>
+          </div>
+        </div>
+        <form id="rootCauseForm" [formGroup]="rootCauseForm">
+          <div class="row" style="margin-top: 10px;">
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <input id="rootCause" maxlength="100" type="text" placeholder="Root Cause" class="form-control"
+                      formControlName="rootCauseName"
+                      [ngClass]="{ 'is-invalid': rootCauseSubmitted && root.rootCauseName.errors }" />
+                    <div *ngIf="rootCauseSubmitted && root.rootCauseName.errors" class="invalid-feedback">
+                      <div *ngIf="root.rootCauseName.errors.required">Root Cause is required</div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card border-shadow" *ngIf="setOption == 'Document'">
+  <div class="card-body">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6">
+              <label>
+                <h3 style="color: #ed5c0e;"> Document</h3>
+              </label>
+            </div>
+            <div class="col-md-6">
+              <button class="btn btn-primary pull-right" (click)="changeDocument()" title="For add new Category">
+                <fa name="plus"></fa>&nbsp;Add Document
+              </button>
+            </div>
+          </div>
+          <app-table-app id="AdditionaltabelId" (customDelete)="fnDeleteAdditionDocument($event)"
+            (customEdit)="fnEditAdditionDocument($event)" [customDatatableobj]="datatableDocument"></app-table-app>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card border-shadow" *ngIf="setOption == 'show'">
+  <div class="card-body">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <label>
+            <h3 style="color: #ed5c0e;"> Additional Details </h3>
+          </label>
+
+          <div class="pull-right">
+            <button [disabled]="loading" class="btn btn-primary btn-grey" (click)="onSubmitAdditional();">
+              <fa name="save"></fa>
+            </button>&nbsp;
+            <button class="btn btn-primary btn-grey" (click)="cancelDocument()">
+              <fa name="trash"></fa>
+            </button>&nbsp;
+            <button class="btn btn-primary btn-grey">
+              <fa name="file-excel-o"></fa>
+            </button>&nbsp;
+            <button class="btn btn-primary btn-grey">
+              <fa name="print"></fa>
+            </button>
+          </div>
+        </div>
+
+      </div>
+      <form id="additionalForm" [formGroup]="additionalForm">
+        <img *ngIf="additionalLoading" class="pl-3"
+          src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label>File Name</label>
+              <input maxlength="100" type="text" placeholder="File Name" class="form-control" formControlName="fileName"
+                [ngClass]="{ 'is-invalid': additionalSubmitted && a.fileName.errors }" />
+              <div *ngIf="additionalSubmitted && a.fileName.errors" class="invalid-feedback">
+                <div *ngIf="a.fileName.errors.required">File Name is required</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label>Document Title</label>
+              <input id="documentTitle" maxlength="100" type="text" placeholder="Document Title" class="form-control"
+                formControlName="documentTitle"
+                [ngClass]="{ 'is-invalid': additionalSubmitted && a.documentTitle.errors }" />
+              <div *ngIf="additionalSubmitted && a.documentTitle.errors" class="invalid-feedback">
+                <div *ngIf="a.documentTitle.errors.required">Document Title is required</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label>Document Owner</label>
+              <input id="" maxlength="100" type="text" placeholder="Document Owner" class="form-control"
+                formControlName="documentOwner"
+                [ngClass]="{ 'is-invalid': additionalSubmitted && a.documentOwner.errors }" />
+              <div *ngIf="additionalSubmitted && a.documentOwner.errors" class="invalid-feedback">
+                <div *ngIf="a.documentOwner.errors.required">Document Owner is required</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label>Document attachment</label>
+              <input maxlength="100" type="file" placeholder="attachment" class="form-control"
+                formControlName="attachment" />
+            </div>
+          </div>
+        </div>
+
+
+      </form>
+    </div>
+  </div>
+</div>

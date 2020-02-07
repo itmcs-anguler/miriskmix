@@ -1,0 +1,10 @@
+<label class="lblgrey18bold" *ngIf="mainLabelRequired"><b>{{mainlabel}}</b></label>
+<ngx-select-dropdown [(ngModel)]="selectedVal" (change)="fnSelectVal()" name="selectedVal" [config]="config"
+  [options]="optionsValues"></ngx-select-dropdown>
+<!--
+    Refrence link is : https://www.npmjs.com/package/ngx-select-dropdown
+
+  <ngx-select-dropdown (change)="selectionChanged($event)" [multiple]="true" [(ngModel)]="dataModel" [config]="config"
+    [options]="dropdownOptions"></ngx-select-dropdown>
+  
+  -->

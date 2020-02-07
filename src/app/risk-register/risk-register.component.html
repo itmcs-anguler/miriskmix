@@ -1,0 +1,284 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-light col-md-12">
+  <div class="col-md-6">
+    <button type="button" navdrpbtn="maindropdown" class="text-secondary btn ">
+      <span class="mainheadName">
+        &nbsp;Risk Register
+      </span>
+    </button>
+  </div>
+  <div class="col-md-6">
+    <!-- <button class="btn btn-primary pull-right mainheadbtn" *ngIf="setOption == 'Grid'" (click)="changeMenu('Add')"
+      title="For add new Risk Register">
+      <fa name="plus"></fa>&nbsp;Add Risk Register
+    </button> -->
+    <div class="pull-right" *ngIf="classReference.riskRegisterOption == 'add'">
+      <button [disabled]="loading" *ngIf="canSave" class="btn btn-primary btn-grey" (click)="onSubmit();">
+        <fa name="save"></fa>
+      </button>&nbsp;
+      <button class="btn btn-primary btn-grey" (click)="changeMenu('Grid');fillForm('')">
+        <fa name="trash"></fa>
+      </button>&nbsp;
+      <button class="btn btn-primary btn-grey" (click)="exportAsXLSX()">
+        <fa name="file-excel-o"></fa>
+      </button>&nbsp;
+      <button class="btn btn-primary btn-grey" (click)="printAsPdf()">
+        <fa name="print"></fa>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="main-content" *ngIf="classReference.riskRegisterOption == 'search'">
+  <!-- <div class="main-content" *ngIf="setOption == 'Grid'"> -->
+  <div class="card" style="padding: 20px;">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="form-group">
+
+          <app-select-app [selectedVal]="drpcatgoryvalueCustomSearch" [mainlabel]="categoryLabel"
+            [mainlabelclass]="categoryLabelClass" [mainid]="categoryid" [optionsValues]="preparedcategoryOptions"
+            (customChange)="fnCustomSearchSet($event,'categoryCustomSearch')"></app-select-app>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <label class="lblgrey18bold"><b>Risk Owner Name</b></label>
+          <input type="text" placeholder="Risk Owner" (keyup)="fnCustomSearchSet($event,'ownerCustomSearch')"
+            class="form-control" id="ownerCustomSearch" />
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <app-select-app [selectedVal]="drpriskStatusCustomSearch" [mainlabel]="riskStatusLabel"
+            [mainlabelclass]="riskStatusLabelClass" [mainid]="riskStatusid" [optionsValues]="preparedriskStatusOptions"
+            (customChange)="fnCustomSearchSet($event,'statusCustomSearch')"></app-select-app>
+          <!-- (customChange)="fnSetVal($event,'statusCustomSearch')" -->
+        </div>
+      </div>
+      <div class="col-md-3">
+      </div>
+    </div>
+    <div class="row text-center">
+      <div class="col-md-12">
+        <button (click)="fnSearchCategoryStatusOwner()" class="btn btn-primary mainheadbtn"
+          title="For Search Risk Register">
+          <fa name="search"></fa>&nbsp;Search
+        </button>&nbsp;
+        <button class="btn btn-primary" (click)="fnResetSearchCategoryStatusOwner()" title="For Reset Risk Register">
+          <fa name="refresh"></fa>&nbsp;Reset
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card" *ngIf="datableShowHide">
+    <div class="card-body">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+            <app-table-app [customDatatableobj]="datatable" (customDelete)="fnDelete($event)"
+              (customEdit)="fnEdit($event)"></app-table-app>
+            <!-- <app-demo-table [title]="datatable.title" [cols]="datatable.cols" [rows]="datatable.rows"></app-demo-table> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="main-content" *ngIf="classReference.riskRegisterOption == 'add'">
+  <div class="card">
+    <div class="card-body">
+      <div class="container-fluid">
+        <form [formGroup]="riskRegisterForm">
+          <img *ngIf="loading" class="pl-3"
+            src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+          <div class="row">
+            <div class="col-md-12">
+              <input type="hidden" name="id" formControlName="id" />
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Category</label>
+                    <app-select-app [selectedVal]="drpcatgoryvalue" (customChange)="fnSetVal($event,'category')"
+                      [mainLabelRequired]="false" [mainlabel]="categoryLabel" [mainlabelclass]="categoryLabelClass"
+                      [mainid]="categoryid" [optionsValues]="preparedcategoryOptions"></app-select-app>
+
+                    <div *ngIf="submitted && f.category.errors" class="invalid-feedback">
+                      <div *ngIf="f.category.errors.required">Category is required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Risk Description</label>
+                    <textarea maxlength="1000" type="text" placeholder="Risk Description"
+                      formControlName="riskDescription" class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && f.riskDescription.errors }"></textarea>
+                    <div *ngIf="submitted && f.riskDescription.errors" class="invalid-feedback">
+                      <div *ngIf="f.riskDescription.errors.required">Risk Description is required</div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <input maxlength="1000" type="hidden" formControlName="uniqueId" class="form-control" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Inherent Risk Likelihood</label>
+                    <app-select-app [selectedVal]="drpinheritRiskLikelihoodvalue" [mainLabelRequired]="false"
+                      [mainlabel]="inherentRiskLikelihood" [mainlabelclass]=""
+                      (customChange)="fnSetVal($event,'inheritRiskLikelihood');" [mainid]="inherentRiskLikelihoodid"
+                      [optionsValues]="preparedInherentRiskLikelihoodOptions">
+                    </app-select-app>
+                    <div *ngIf=" submitted && f.inheritRiskLikelihood.errors" class="invalid-feedback">
+                      <div *ngIf="f.inheritRiskLikelihood.errors.required">Inherent Risk Likelihood is required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Inherent Impact Assessment</label>
+                    <app-select-app [selectedVal]="drpinherentImpactAssessmentvalue" [mainLabelRequired]="false"
+                      [mainlabel]="inherentImpactAssessment" [mainlabelclass]=""
+                      (customChange)="fnSetVal($event,'inheritImpactAssessment');" [mainid]="inheritImpactAssessmentid"
+                      [optionsValues]="preparedInherentImpactAssessmentOptions">
+                    </app-select-app>
+                    <div *ngIf=" submitted && f.inheritImpactAssessment.errors" class="invalid-feedback">
+                      <div *ngIf="f.inheritImpactAssessment.errors.required">Inherent Impact Assessment is required
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Inherent Risk Assessment Score</label>
+                    <input readonly type="text" [(ngModel)]="inheritRiskAssessmentScore"
+                      placeholder="Risk Assessment Score" class="form-control"
+                      formControlName="inheritRiskAssessmentScore" />
+                    <div *ngIf="submitted && f.inheritRiskAssessmentScore.errors" class="invalid-feedback">
+                      <div *ngIf="f.inheritRiskAssessmentScore.errors.required">Inherent Risk Assessment Score is
+                        required
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Current Controls</label>
+                    <input type="text" placeholder="Current Controls" class="form-control"
+                      formControlName="currentControls"
+                      [ngClass]="{ 'is-invalid': submitted && f.currentControls.errors }" />
+                    <div *ngIf="submitted && f.currentControls.errors" class="invalid-feedback">
+                      <div *ngIf="f.currentControls.errors.required">Current Controls is required
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Risk Owner</label>
+                    <input type="text" placeholder="Risk Owner" class="form-control" formControlName="riskOwner"
+                      [ngClass]="{ 'is-invalid': submitted && f.riskOwner.errors }" />
+                    <div *ngIf="submitted && f.riskOwner.errors" class="invalid-feedback">
+                      <div *ngIf="f.riskOwner.errors.required">Risk Owner is required
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Further Action</label>
+                    <input type="text" placeholder="Further Action" class="form-control" formControlName="furthurAction"
+                      [ngClass]="{ 'is-invalid': submitted && f.furthurAction.errors }" />
+                    <div *ngIf="submitted && f.furthurAction.errors" class="invalid-feedback">
+                      <div *ngIf="f.furthurAction.errors.required">Further Action is required
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Residual Risk Likelihood</label>
+                    <app-select-app [selectedVal]="drpresidualRiskLikelihoodvalue" [mainLabelRequired]="false"
+                      [mainlabel]="residualRiskLikelihood" [mainlabelclass]=""
+                      (customChange)="fnSetVal($event,'residualRiskLikelihood')" [mainid]="residualRiskLikelihoodid"
+                      [optionsValues]="preparedRiskLikelihoodOptions"></app-select-app>
+                    <div *ngIf="submitted && f.residualRiskLikelihood.errors" class="invalid-feedback">
+                      <div *ngIf="f.residualRiskLikelihood.errors.required">Residual Risk Likelihood is required
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Residual Impact Assessment</label>
+                    <app-select-app [selectedVal]="drpresidualImpactAssessmentvalue" [mainLabelRequired]="false"
+                      [mainlabel]="residualImpactAssessment" [mainlabelclass]=""
+                      (customChange)="fnSetVal($event,'residualImpactAssessment')" [mainid]="residualImpactAssessmentid"
+                      [optionsValues]="preparedImpactAssessmentOptions"></app-select-app>
+                    <div *ngIf="submitted && f.residualImpactAssessment.errors" class="invalid-feedback">
+                      <div *ngIf="f.residualImpactAssessment.errors.required">Residual Impact Assessment is required
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Residual Risk Assessment Score</label>
+                    <input [(ngModel)]="residualRiskScore" readonly placeholder="Residual Risk Assessment Score"
+                      type="text" class="form-control" formControlName="residualRiskAssessmentScore"
+                      [ngClass]="{ 'is-invalid': submitted && f.residualRiskAssessmentScore.errors }" />
+                    <div *ngIf="submitted && f.residualRiskAssessmentScore.errors" class="invalid-feedback">
+                      <div *ngIf="f.residualRiskAssessmentScore.errors.required">Residual Risk Assessment Score is
+                        required
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Risk Status</label>
+                    <app-select-app [selectedVal]="drpriskStatusvalue" [mainLabelRequired]="false"
+                      [mainlabel]="riskStatusLabel" [mainlabelclass]="riskStatusLabelClass"
+                      (customChange)="fnSetVal($event,'riskStatus')" [mainid]="riskStatusid"
+                      [optionsValues]="preparedriskStatusOptions"></app-select-app>
+                    <div *ngIf="submitted && f.riskStatus.errors" class="invalid-feedback">
+                      <div *ngIf="f.riskStatus.errors.required">Risk Status Score is
+                        required
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+</div>

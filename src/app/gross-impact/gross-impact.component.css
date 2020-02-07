@@ -1,0 +1,35 @@
+.main-content{
+    box-shadow: 0 8px 6px -6px black;
+}
+
+.navbar-expand-lg{    
+    border-bottom: #ed5c0e 3px solid;
+    background-color: #ede0d9a3 !important;
+}
+.lblgrey18bold{
+    font-size: 18px;
+    color: #495057;
+}
+.mainheadName{
+    font-weight: 600;
+    font-size: 18px;
+    color: #495057;
+}
+.mainheadbtn {
+    background-color: #ed5c0e;
+    color: white;
+    font-weight: 600;
+    border-color: #ed5c0e;
+}
+.border-shadow{
+box-shadow: 0 8px 6px -6px black;
+}
+.btn-grey{
+    background-color: grey;
+    border-color: grey;
+    color: white;
+}
+.lblgrey18bold{
+    font-size: 18px;
+    color: #495057;
+}

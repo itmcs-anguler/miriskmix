@@ -1,0 +1,145 @@
+<nav class="navbar nav-tabs navbar-expand-lg navbar-dark bg-light static-head"
+    style="box-shadow: -1px 5px 6px -6px #212529;">
+    <div class="row " style="width: 100%;">
+        <!--  Risk Event componets is Risk Incident -->
+        <div id="navId" class="col-md-10">
+            <img src="/assets/images/MIRisk.png" routerLink="dashboard" alt="img"
+                style="width: 100px;height: 40px;cursor: pointer;margin-right: 15px;">
+            <div class="btn-group" *ngIf="checkRegardingPageAccess('Risk_Incident')">
+                <button type="button" navdrpbtn="maindropdown"
+                    class="text-secondary btn dropdown-toggle nav-link active" data-toggle="dropdown"
+                    (click)="showHide('riskIncident');navClick()">
+                    <!-- <fa name="exclamation-triangle"></fa>&nbsp;  -->
+                    RISK INCIDENTS
+                </button>
+                <div class="dropdown-menu" id="riskIncident">
+                    <a class="dropdown-item " routerLink="risk-incident"
+                        (click)="setVariable('searchIncident')">Search</a>
+                    <a class="dropdown-item " routerLink="risk-incident" (click)="setVariable('addIncident')">Add </a>
+                </div>
+            </div>
+
+            <div class="btn-group" *ngIf="checkRegardingPageAccess('MIS')">
+                <button type="button" routerLink="mis-report" navdrpbtn="maindropdown"
+                    class="text-secondary btn nav-link" data-toggle="dropdown" (click)="showHide('mis');navClick()">
+                    <!-- <fa name="flag"></fa>&nbsp;  -->
+                    MIS
+                </button>
+
+            </div>
+
+            <div class="btn-group" *ngIf="checkRegardingPageAccess('Risk_Register')">
+                <button type="button" navdrpbtn="maindropdown" class="text-secondary btn dropdown-toggle nav-link"
+                    data-toggle="dropdown" (click)="showHide('riskRegister');navClick()">
+                    <!-- <fa name="asterisk"></fa>&nbsp;  -->
+                    RISK REGISTER
+                </button>
+                <div class="dropdown-menu" id="riskRegister">
+                    <a class="dropdown-item " routerLink="risk-register"
+                        (click)="setVariable('searchRiskRegister')">Search</a>
+                    <a class="dropdown-item " routerLink="risk-register" (click)="setVariable('addRiskRegister')">Add
+                    </a>
+                </div>
+
+            </div>
+
+            <div class="btn-group" *ngIf="checkRegardingPageAccess('Asset_Register')">
+                <button type="button" navdrpbtn="maindropdown" class="text-secondary btn dropdown-toggle nav-link"
+                    data-toggle="dropdown" (click)="showHide('assetRegister');navClick()">
+                    <!-- <fa name="bookmark"></fa>&nbsp; -->
+                    ASSET REGISTER
+                </button>
+                <div class="dropdown-menu" id="assetRegister">
+                    <a class="dropdown-item " routerLink="asset-register"
+                        (click)="setVariable('searchAssetRegister')">Search</a>
+                    <a class="dropdown-item " routerLink="asset-register" (click)="setVariable('addAssetRegister')">Add
+                    </a>
+                </div>
+            </div>
+
+            <div class="btn-group" *ngIf="checkRegardingPageAccess('Asset_Register')">
+                <button type="button" routerLink="document" navdrpbtn="maindropdown" class="text-secondary btn nav-link"
+                    data-toggle="dropdown" (click)="showHide('document');navClick()">
+                    <!-- <fa name="file"></fa>&nbsp;  -->
+                    DOCUMENT
+                </button>
+
+            </div>
+
+            <div class="btn-group" id="adminRightsRoles">
+                <button type="button" navdrpbtn="maindropdown" class="text-secondary btn dropdown-toggle nav-link"
+                    data-toggle="dropdown" (click)="showHide('myAccount');navClick()">
+                    <!-- <fa name="user"></fa>&nbsp; -->
+                    ACCOUNT
+                </button>
+                <div class="dropdown-menu" id="myAccount">
+                    <a class="dropdown-item" *ngIf="checkRegardingPageAccess('Manage_User')" routerLink="user">Manage
+                        User </a>
+                    <a class="dropdown-item" *ngIf="checkRegardingPageAccess('Manage_Role')" routerLink="role">Manager
+                        Role </a>
+                    <a class="dropdown-item" *ngIf="checkRegardingPageAccess('Manage_Permission')"
+                        routerLink="permission">Manage Permissions</a>
+                </div>
+            </div>
+
+            <div class="btn-group" id="adminMasters">
+
+                <button type="button" navdrpbtn="maindropdown" class="text-secondary btn dropdown-toggle nav-link"
+                    data-toggle="dropdown" (click)="showHide('adminAccount');navClick()">
+                    <!-- <fa name="cogs"></fa>&nbsp;  -->
+                    ADMIN
+                </button>
+                <div class="dropdown-menu" id="adminAccount">
+                    <a class="dropdown-item" routerLink="auditlog">Audit Log</a>
+                    <a class="dropdown-item" *ngIf="checkRegardingPageAccess('Category')"
+                        routerLink="category">Category</a>
+                    <a class="dropdown-item" *ngIf="checkRegardingPageAccess('Residual_Risk_Likelihood')"
+                        routerLink="likelihood">Residual Risk Likelihood</a>
+                    <a class="dropdown-item" *ngIf="checkRegardingPageAccess('Risk_Status')"
+                        routerLink="risk-status">Risk Status</a>
+                    <a class="dropdown-item" *ngIf="checkRegardingPageAccess('CCY')" routerLink="ccy">CCY</a>
+                    <a class="dropdown-item" *ngIf="checkRegardingPageAccess('Event_Type')"
+                        routerLink="event-type">Event Type</a>
+                    <a class="dropdown-item" *ngIf="checkRegardingPageAccess('Event_Status')"
+                        routerLink="event-status">Event Status</a>
+                    <a class="dropdown-item" *ngIf="checkRegardingPageAccess('Risk_Category_Level_1')"
+                        routerLink="risk-category-one">Risk Category Level 1</a>
+                    <a class="dropdown-item" *ngIf="checkRegardingPageAccess('Risk_Category_Level_2')"
+                        routerLink="risk-category-two">Risk Category Level 2</a>
+                    <a class="dropdown-item" *ngIf="checkRegardingPageAccess('Residual_Impact_Assessment')"
+                        routerLink="residual-impact-assessment">Residual Impact Assessment</a>
+                    <a class="dropdown-item" *ngIf="checkRegardingPageAccess('Inherent_Risk_Likelihood')"
+                        routerLink="inherit-risk-likelihood">Inherent Risk Likelihood</a>
+                    <a class="dropdown-item" *ngIf="checkRegardingPageAccess('Inherent_Impact_Assessment')"
+                        routerLink="inherent-impact-assessment">Inherent Impact Assessment</a>
+                    <!--  <a class="dropdown-item" routerLink="managePage">Manage Page</a> -->
+                </div>
+            </div>
+            <!-- <div class="btn-group">
+                <button type="button" routerLink="managePage" navdrpbtn="maindropdown"
+                    class="text-secondary btn nav-link" data-toggle="dropdown"
+                    (click)="showHide('managePage');navClick()">
+                    MANAGE PAGE
+                </button>
+            </div> -->
+        </div>
+
+        <div class="col-md-2 ">
+            <button type="button" navdrpbtn="maindropdown"
+                class="text-secondary text-formatter btn dropdown-toggle nav-link" data-toggle="dropdown"
+                (click)="showHide('logout');navClick()">
+                <fa name="user"></fa>&nbsp;{{userName}}
+            </button>
+            <div class="dropdown-menu " id="logout">
+                <a class="dropdown-item " style="font-weight: 600;color: #ed5c0e;" (click)="logout()">Log
+                    Out</a>
+
+            </div>
+            <!-- <button type="button" class=" btn btn-theme pull-right " (click)="logout()">
+                <fa name="sign-out" style="color: white;"></fa>&nbsp;
+                Log Out
+            </button> -->
+
+        </div>
+    </div>
+</nav>
