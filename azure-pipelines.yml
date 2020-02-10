@@ -25,7 +25,7 @@ jobs:
       #----------------------------------------------------------------------
       # Tests
       #----------------------------------------------------------------------
-       - script: npm install
+      - script: npm install
         displayName: 'INSTALL: launch npm install'
       - script: |
           chmod +x mvnw
@@ -34,11 +34,10 @@ jobs:
       - script: ./mvnw com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='run test'
         displayName: 'TESTS: frontend'
       - script: ./mvnw verify -Pprod -DskipTests
-        displayName: 'TESTS: packaging'       
-          
-     #----------------------------------------------------------------------
-     # Production build
-     #----------------------------------------------------------------------
+        displayName: 'TESTS: packaging'
+      #----------------------------------------------------------------------
+      # Production build
+      #----------------------------------------------------------------------
       - script: ./mvnw package -Pprod -DskipTests
         displayName: 'BUILD: creating production build'
       - task: CopyFiles@2
@@ -49,4 +48,4 @@ jobs:
       - task: PublishBuildArtifacts@1
         inputs:
           pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-          artifactName: bugtracker     
+          artifactName: bugtracker
