@@ -51,8 +51,8 @@ jobs:
      #----------------------------------------------------------------------
      # Production build
      #----------------------------------------------------------------------
-      - script: ./mvnw package -Pprod -DskipTests
-        displayName: 'BUILD: creating production build'
+      #- script: ./mvnw package -Pprod -DskipTests
+       # displayName: 'BUILD: creating production build'
       - task: CopyFiles@2
         inputs:
           SourceFolder: 'target'
