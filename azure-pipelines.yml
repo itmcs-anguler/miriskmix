@@ -23,19 +23,6 @@ jobs:
       - script: sudo /etc/init.d/mysql stop
         displayName: 'TOOLS: stop MySQL'
       #----------------------------------------------------------------------
-      # Tests
-      #----------------------------------------------------------------------
-      - script: npm install
-        displayName: 'INSTALL: launch npm install'
-      - script: |
-          chmod +x mvnw
-          ./mvnw clean verify
-        displayName: 'TESTS: backend'
-      - script: ./mvnw com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='run test'
-        displayName: 'TESTS: frontend'
-      - script: ./mvnw verify -Pprod -DskipTests
-        displayName: 'TESTS: packaging'
-      #----------------------------------------------------------------------
       # Production build
       #----------------------------------------------------------------------
       - script: ./mvnw package -Pprod -DskipTests
