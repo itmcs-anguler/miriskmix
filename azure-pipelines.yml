@@ -25,34 +25,34 @@ jobs:
       #----------------------------------------------------------------------
       # Tests
       #----------------------------------------------------------------------
-      # - script: npm install
-      #   displayName: 'INSTALL: launch npm install'
-      # - script: |
-      #     chmod +x mvnw
-      #     ./mvnw clean verify
-      #   displayName: 'TESTS: backend'
-      # - script: ./mvnw com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='run test'
-      #   displayName: 'TESTS: frontend'
-      # - script: ./mvnw verify -Pprod -DskipTests
-      #   displayName: 'TESTS: packaging'
+       - script: npm install
+         displayName: 'INSTALL: launch npm install'
+       - script: |
+           chmod +x mvnw
+           ./mvnw clean verify
+         displayName: 'TESTS: backend'
+       - script: ./mvnw com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='run test'
+         displayName: 'TESTS: frontend'
+       - script: ./mvnw verify -Pprod -DskipTests
+         displayName: 'TESTS: packaging'
         
-      # - script: ./mvnw package -Pprod -DskipTests
-      #   displayName: 'BUILD: creating production build'
-      # - task: CopyFiles@2
-      #   inputs:
-      #     SourceFolder: 'target'
-      #     Contents: '*.jar'
-      #     TargetFolder: '$(Build.ArtifactStagingDirectory)'
-      # - task: PublishBuildArtifacts@1
-      #   inputs:
-      #     pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-      #     artifactName: bugtracker            
+       - script: ./mvnw package -Pprod -DskipTests
+         displayName: 'BUILD: creating production build'
+       - task: CopyFiles@2
+         inputs:
+           SourceFolder: 'target'
+           Contents: '*.jar'
+           TargetFolder: '$(Build.ArtifactStagingDirectory)'
+       - task: PublishBuildArtifacts@1
+         inputs:
+           pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+           artifactName: bugtracker            
           
      #----------------------------------------------------------------------
      # Production build
      #----------------------------------------------------------------------
-      #- script: ./mvnw package -Pprod -DskipTests
-       # displayName: 'BUILD: creating production build'
+      - script: ./mvnw package -Pprod -DskipTests
+        displayName: 'BUILD: creating production build'
       - task: CopyFiles@2
         inputs:
           SourceFolder: 'target'
